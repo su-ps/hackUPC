@@ -1,8 +1,8 @@
 package Model;
 
-public class Constants {
+class Constants {
 
-    public static int newValue(){
+    static int newValue(){
         if (Math.random()>0.9){
             return 4;
         }else{
@@ -10,7 +10,7 @@ public class Constants {
         }
     }
 
-    public static int[][][] movementDataSet = new int [][][] {
+    static int[][][] movementDataSet = new int [][][] {
             {{0,1},{-1,-1},{-1,-1},{-1,-1},{1,1},{1,0}},    //fet
             {{0,2},{0,0},{-1,-1},{-1,-1},{1,2},{1,1}},      //fet
             {{-1,-1},{0,1},{-1,-1},{-1,-1},{1,3},{1,2}},    //fet

@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Box {
 
     private int value;
-    HashMap<Direction , int[]> movementHashMap;
+    private HashMap<Direction , int[]> movementHashMap;
 
     Box(int[][] fullMoveset){
         this.value = 0;
@@ -26,7 +26,7 @@ public class Box {
         }
     }
 
-    public void setValue(int value){
+    void setValue(int value){
         this.value=value;
     }
 

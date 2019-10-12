@@ -89,39 +89,56 @@ public class Board {
     public void newMovement(Direction direction){
 
         switch (direction){
+            case TopRight:
+            case TopLeft:
             case Left:
-                for(Box[] row : boxes){
-                    for (int i = row.length; i > 0; i--) {
-
-                    }
-                }
-                break;
-            case Right:
-                for(Box[] row : boxes){
-                    for (int i = 0; i < row.length; i--) {
-
+                for (int i = 0; i < boxes.length; i++) {
+                    for (int j = 0; j < boxes[i].length; j++) {
+                        move(boxes[i][j], direction, i, j);
                     }
                 }
                 break;
             case BotRight:
             case BotLeft:
-                for (int i = boxes.length; i > 0 ; i--) {
-                    for (Box box : boxes[i]) {
-
-                    }
-                }
-                break;
-            case TopRight:
-            case TopLeft:
-                for (Box[] row : boxes){
-                    for (Box box : row){
-
+            case Right:
+                for (int i = boxes.length; i > 0; i--) {
+                    for (int j = boxes[i].length; j > 0; j--) {
+                        move(boxes[i][j], direction, i, j);
                     }
                 }
                 break;
 
             default:
         }
+    }
+
+    private void move(Box box, Direction direction, int y, int x){
+
+        int[] newCoordinates = box.getMoveset(direction);
+        Box nextBox = boxes[newCoordinates[0]][newCoordinates[1]];
+        if (newCoordinates[0]!=-1){
+            if (nextBox.getValue()!=0){
+                if (nextBox.getValue()==box.getValue()){
+                    merge(x, y, newCoordinates[1], newCoordinates[0]);
+                }
+            }else{
+                int value = boxes[y][x].getValue();
+                boxes[y][x].setValue(0);
+                nextBox.setValue(value);
+            }
+        }
+    }
+
+    public int[] getAllValues(){
+        int[] allValues = new int[19];
+        int counter = 0;
+        for (Box[] box : boxes) {
+            for (Box value : box) {
+                allValues[counter] = value.getValue();
+                counter++;
+            }
+        }
+        return allValues;
     }
 
     public Box[][] getBoxes(){
