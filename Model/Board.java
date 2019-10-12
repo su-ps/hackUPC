@@ -8,11 +8,11 @@ public class Board {
 
     public Board(){
         boxes = new Box[][] {
-                {new Box(), new Box(), new Box()},
-                {new Box(), new Box(), new Box(), new Box()},
-                {new Box(), new Box(), new Box(), new Box(), new Box()},
-                {new Box(), new Box(), new Box(), new Box()},
-                {new Box(), new Box(), new Box()}
+                {new Box(Constants.movementDataSet[0]), new Box(Constants.movementDataSet[1]), new Box(Constants.movementDataSet[2])},
+                {new Box(Constants.movementDataSet[3]), new Box(Constants.movementDataSet[4]), new Box(Constants.movementDataSet[5]), new Box(Constants.movementDataSet[6])},
+                {new Box(Constants.movementDataSet[7]), new Box(Constants.movementDataSet[8]), new Box(Constants.movementDataSet[9]), new Box(Constants.movementDataSet[10]), new Box(Constants.movementDataSet[11])},
+                {new Box(Constants.movementDataSet[12]), new Box(Constants.movementDataSet[13]), new Box(Constants.movementDataSet[14]), new Box(Constants.movementDataSet[15])},
+                {new Box(Constants.movementDataSet[16]), new Box(Constants.movementDataSet[17]), new Box(Constants.movementDataSet[18])}
         };
 
         emptyBoardGeneration();
@@ -86,6 +86,44 @@ public class Board {
 
     }
 
+    public void newMovement(Direction direction){
+
+        switch (direction){
+            case Left:
+                for(Box[] row : boxes){
+                    for (int i = row.length; i > 0; i--) {
+
+                    }
+                }
+                break;
+            case Right:
+                for(Box[] row : boxes){
+                    for (int i = 0; i < row.length; i--) {
+
+                    }
+                }
+                break;
+            case BotRight:
+            case BotLeft:
+                for (int i = boxes.length; i > 0 ; i--) {
+                    for (Box box : boxes[i]) {
+
+                    }
+                }
+                break;
+            case TopRight:
+            case TopLeft:
+                for (Box[] row : boxes){
+                    for (Box box : row){
+
+                    }
+                }
+                break;
+
+            default:
+        }
+    }
+
     public Box[][] getBoxes(){
         return this.boxes;
     }
@@ -100,6 +138,13 @@ public class Board {
             ret = ret.concat("\n");
         }
         return ret;
+    }
+
+    private void merge(int x1, int y1, int x2, int y2){
+        if ((boxes[y1][x1].getValue()==boxes[y2][x2].getValue())&&(boxes[y1][x1].getValue()!=0&&boxes[y2][x2].getValue()!=0)){
+            boxes[y1][x1].setValue(0);
+            boxes[y2][x2].setValue();
+        }
     }
 
 

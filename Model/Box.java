@@ -1,15 +1,24 @@
 package Model;
 
+import java.util.HashMap;
+
 public class Box {
 
     private int value;
+    HashMap<Direction , int[]> movementHashMap;
 
-
-    public Box(){
+    Box(int[][] fullMoveset){
         this.value = 0;
+        movementHashMap = new HashMap<>();
+        movementHashMap.put(Direction.Right, fullMoveset[0]);
+        movementHashMap.put(Direction.Left, fullMoveset[1]);
+        movementHashMap.put(Direction.TopRight, fullMoveset[2]);
+        movementHashMap.put(Direction.TopLeft, fullMoveset[3]);
+        movementHashMap.put(Direction.BotRight, fullMoveset[4]);
+        movementHashMap.put(Direction.BotLeft, fullMoveset[5]);
     }
 
-    public void setValue(){
+    void setValue(){
         if (this.value==0){
             this.value++;
         }else{
@@ -21,16 +30,12 @@ public class Box {
         this.value=value;
     }
 
-    public int getValue() {
-        return value;
+    public int[] getMoveset(Direction direction){
+        return this.movementHashMap.get(direction);
     }
 
-    public boolean canMove(int x1, int y1, int x2, int y2, int length){
-        if (x2 < length && x2 >= 0 && y2 >= 0 && y2 < 5) {
-            return !((y2 == y1 - 1 && x2 == x1 + 1) || (y2 == y1 + 1 && x2 == x1 + 1));
-        }else{
-            return false;
-        }
+    int getValue() {
+        return value;
     }
 
     @Override
