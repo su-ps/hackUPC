@@ -117,6 +117,8 @@ public class Board {
                 break;
         }
 
+        newValue(direction);
+
     } //comprovat
 
     private void move(Box box, Direction direction, int y, int x){
