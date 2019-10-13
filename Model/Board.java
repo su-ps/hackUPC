@@ -28,13 +28,13 @@ public class Board {
 
         do {
             x = rnd.nextInt(5);
-            if (x<boxes[y].length){
+            if (x<boxes[y].length&&boxes[y][x].getValue()==0){
                 check=true;
             }
         }while(!check);
 
         boxes[y][x].setValue(Constants.newValue());
-    }
+    }   //comprovat
 
     public void newValue(Direction direction){
 
@@ -84,7 +84,7 @@ public class Board {
         int[] winningPosition = emptyPositions[rnd.nextInt(emptyPositions.length)];
         boxes[winningPosition[0]][winningPosition[1]].setValue(Constants.newValue());
 
-    }
+    } //comprovat
 
     public void newMovement(Direction direction){
 
@@ -101,33 +101,47 @@ public class Board {
             case BotRight:
             case BotLeft:
             case Right:
-                for (int i = boxes.length; i > 0; i--) {
-                    for (int j = boxes[i].length; j > 0; j--) {
+                for (int i = boxes.length-1; i >= 0; i--) {
+                    for (int j = boxes[i].length-1; j >= 0; j--) {
                         move(boxes[i][j], direction, i, j);
                     }
                 }
                 break;
-
-            default:
         }
-    }
+        newValue(direction);
+
+    } //comprovat
 
     private void move(Box box, Direction direction, int y, int x){
 
-        int[] newCoordinates = box.getMoveset(direction);
-        Box nextBox = boxes[newCoordinates[0]][newCoordinates[1]];
-        if (newCoordinates[0]!=-1){
-            if (nextBox.getValue()!=0){
-                if (nextBox.getValue()==box.getValue()){
-                    merge(x, y, newCoordinates[1], newCoordinates[0]);
+
+        do {
+            int[] availableMovement = box.getMoveset(direction);
+            if (availableMovement[0]!=-1){
+                Box newBox = boxes[availableMovement[0]][availableMovement[1]];
+                if (newBox.getValue()>0){
+                    if (box.getValue()==newBox.getValue()){
+                        merge(x, y, availableMovement[1], availableMovement[0]);
+
+                    }else{
+                        break;
+                    }
+                }else{
+                    int value = box.getValue();
+                    boxes[availableMovement[0]][availableMovement[1]].setValue(value);
+                    boxes[y][x].setToZero();
+
+                    box = newBox;
+                    y = availableMovement[0];
+                    x = availableMovement[1];
                 }
             }else{
-                int value = boxes[y][x].getValue();
-                boxes[y][x].setValue(0);
-                nextBox.setValue(value);
+                break;
             }
-        }
-    }
+
+        }while(true);
+
+    }   //revisat
 
     public int[] getAllValues(){
         int[] allValues = new int[19];

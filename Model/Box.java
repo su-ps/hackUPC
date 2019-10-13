@@ -20,10 +20,14 @@ public class Box {
 
     void setValue(){
         if (this.value==0){
-            this.value++;
+            this.value=2;
         }else{
             this.value*=2;
         }
+    }
+
+    void setToZero(){
+        this.value=0;
     }
 
     void setValue(int value){
@@ -35,7 +39,7 @@ public class Box {
     }
 
     int getValue() {
-        return value;
+        return this.value;
     }
 
     @Override
