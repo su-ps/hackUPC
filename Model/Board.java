@@ -115,7 +115,6 @@ public class Board {
                 }
                 break;
         }
-        boolean game = newValue(direction);
 
     } //comprovat
 
