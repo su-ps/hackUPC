@@ -2,44 +2,60 @@ package View;
 
 import Controller.Main;
 import Model.Direction;
+import javafx.animation.PauseTransition;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.util.Duration;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class Layout {
 
     BorderPane borderPane;
     StackPane game;
-    StackPane buttons;
+    GridPane buttons;
     Scene scene;
+    Stage window;
 
     public void start(Stage primaryStage) throws Exception {
 
-        Stage window = primaryStage;
+        window = primaryStage;
 
         borderPane = new BorderPane();
         game = new StackPane();
-        buttons = new StackPane();
+        buttons = new GridPane();
         game.setAlignment(Pos.CENTER);
+        buttons.setAlignment(Pos.CENTER);
 
         setBoard();
         setButtons();
+
+        buttons.setHgap(10);
+        buttons.setVgap(10);
+        buttons.setPadding(new Insets(500,100,0,0));
 
         borderPane.setCenter(game);
         borderPane.setRight(buttons);
         scene = new Scene(borderPane);
 
         window.setScene(scene);
-        window.setTitle("Depen de lo que vulguis");
+        window.setTitle("2048");
         window.setMaximized(true);
+
+        getNewValues();
+        checkHexagons();
 
         window.show();
 
@@ -81,17 +97,19 @@ public class Layout {
         if (hexagon.value==0) hexagon.setStyle("-fx-fill:grey;-fx-stroke:black;-fx-stroke-width:5");
         number.setStyle("-fx-font-size:50;");
 
-        game.getChildren().add(hexagon);
-        if (hexagon.value!=0) game.getChildren().add(number);
+        if (hexagon.value==0) number.setText("");
+
+        game.getChildren().addAll(hexagon,number);
+
     }
 
     public void checkHexagons(){
         for (int i=0; i<game.getChildren().toArray().length; i++){
-            if (i%2!=0){
+            if (i%2==0){
                 ((Hexagon)game.getChildren().toArray()[i]).resetStyle();
-                if (((Hexagon)game.getChildren().toArray()[i]).value==0) game.getChildren().remove(i+1);
+                if (((Hexagon)game.getChildren().toArray()[i]).value==0) ((Text)game.getChildren().get(i+1)).setText("");
                 else {
-                    ((Text)game.getChildren().toArray()[i]).setText(Integer.toString(((Hexagon)game.getChildren().toArray()[i]).value));
+                    ((Text)game.getChildren().toArray()[i+1]).setText(Integer.toString(((Hexagon)game.getChildren().toArray()[i]).value));
                 }
             }
         }
@@ -104,16 +122,64 @@ public class Layout {
                 Direction.Left, Direction.Right,
                 Direction.BotLeft, Direction.BotRight};
 
-        for (int i=0; i<6; i++){
+        for (int i=0; i<3; i++){
+        for (int j=0; j<2; j++) {
+            Button button = new Button();
 
-            Button  button = new Button();
-            //button.setGraphic(new ImageView(new Image("files"+ File.separator+directions[i].name()+".png")));
-            final int it = i;
-            button.setOnAction(event->Main.board.newMovement(directions[it]));
+            //button.setGraphic(new ImageView(new Image("files"+ File.separator+directions[2*i+j].name()+".png")));
+            final int it = 2*i+j;
+            button.setOnAction(event -> {
+                Main.board.newMovement(directions[it]);
+                getNewValues();
+                checkHexagons();
+                boolean game = Main.board.isGame();
+                if (!game) finish();
+            });
+            GridPane.setConstraints(button, j, i);
             buttons.getChildren().add(button);
-
+        }
         }
 
+    }
+
+    private void getNewValues(){
+
+        int[] values = Main.board.getAllValues();
+        int counter = 0;
+
+        for (int i=0; i<game.getChildren().toArray().length; i++){
+            if (i%2==0){
+                if (values[counter]==2048) win();
+                ((Hexagon)game.getChildren().toArray()[i]).value = values[counter];
+                counter++;
+            }
+        }
+
+    }
+
+    private void win(){
+        printMessage("Win!!!");
+        System.exit(0);
+    }
+
+    private void finish(){
+        printMessage("Lost!!!");
+        System.exit(0);
+    }
+
+    public void printMessage(String message){
+        Label label = new Label(message);
+        label.setStyle("-fx-font-size:200");
+        Popup popup = new Popup();
+        popup.getContent().add(label);
+        popup.centerOnScreen();
+        popup.show(window);
+        PauseTransition wait = new PauseTransition(Duration.seconds(2));
+        wait.setOnFinished(event -> {
+            popup.hide();
+            wait.playFromStart();
+        });
+        wait.play();
     }
 
 }

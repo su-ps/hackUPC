@@ -1,6 +1,5 @@
 package View;
 
-import java.awt.*;
 import javafx.scene.shape.Polygon;
 
 public class Hexagon extends Polygon {
@@ -22,4 +21,10 @@ public class Hexagon extends Polygon {
         else this.setStyle("-fx-fill:white;-fx-stroke:black;-fx-stroke-width:5");
     }
 
+    @Override
+    public String toString() {
+        return "Hexagon{" +
+                "value=" + value +
+                '}';
+    }
 }
