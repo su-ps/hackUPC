@@ -36,7 +36,7 @@ public class Board {
         boxes[y][x].setValue(Constants.newValue());
     }   //comprovat
 
-    public void newValue(Direction direction){
+    private boolean newValue(Direction direction){
 
         Random rnd = new Random();
         int[][] possiblePositions;
@@ -72,18 +72,25 @@ public class Board {
             }
         }
 
-        emptyPositions = new int[counter][2];
-        counter=0;
-        for (int[] position : possiblePositions) {
-            if (boxes[position[0]][position[1]].getValue() == 0) {
-                emptyPositions[counter] = position;
-                counter++;
+        if (counter != 0) {
+
+            emptyPositions = new int[counter][2];
+            counter = 0;
+            for (int[] position : possiblePositions) {
+                if (boxes[position[0]][position[1]].getValue() == 0) {
+                    emptyPositions[counter] = position;
+                    counter++;
+                }
             }
+
+            int[] winningPosition = emptyPositions[rnd.nextInt(emptyPositions.length)];
+            boxes[winningPosition[0]][winningPosition[1]].setValue(Constants.newValue());
+
+            return true;
+
+        }else{
+            return false;
         }
-
-        int[] winningPosition = emptyPositions[rnd.nextInt(emptyPositions.length)];
-        boxes[winningPosition[0]][winningPosition[1]].setValue(Constants.newValue());
-
     } //comprovat
 
     public void newMovement(Direction direction){
@@ -108,7 +115,7 @@ public class Board {
                 }
                 break;
         }
-        newValue(direction);
+        boolean game = newValue(direction);
 
     } //comprovat
 
