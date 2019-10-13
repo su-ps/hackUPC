@@ -6,7 +6,10 @@ public class Board {
 
     private Box[][] boxes;
 
+    private boolean game;
+
     public Board(){
+        this.game = true;
         boxes = new Box[][] {
                 {new Box(Constants.movementDataSet[0]), new Box(Constants.movementDataSet[1]), new Box(Constants.movementDataSet[2])},
                 {new Box(Constants.movementDataSet[3]), new Box(Constants.movementDataSet[4]), new Box(Constants.movementDataSet[5]), new Box(Constants.movementDataSet[6])},
@@ -36,7 +39,7 @@ public class Board {
         boxes[y][x].setValue(Constants.newValue());
     }   //comprovat
 
-    private boolean newValue(Direction direction){
+    private void newValue(Direction direction){
 
         Random rnd = new Random();
         int[][] possiblePositions;
@@ -86,10 +89,8 @@ public class Board {
             int[] winningPosition = emptyPositions[rnd.nextInt(emptyPositions.length)];
             boxes[winningPosition[0]][winningPosition[1]].setValue(Constants.newValue());
 
-            return true;
-
         }else{
-            return false;
+            this.game = false;
         }
     } //comprovat
 
@@ -184,5 +185,7 @@ public class Board {
         }
     }
 
-
+    public boolean isGame() {
+        return game;
+    }
 }
